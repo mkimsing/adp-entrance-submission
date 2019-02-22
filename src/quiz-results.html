@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quiz Results</title>
+
+    <script src="C:\Users\MKS\Documents\adp-entrance\jquery-3.3.1.min.js"></script>
+
+    <style>
+      .title{
+        text-align:center;
+      }
+
+      #score{
+        text-align:center;
+      }
+    </style>
+
+    <script>
+      function returnToWelcome(){
+        location.href = "quiz-welcome.html";
+      }
+
+      function displayScoreResults(){
+        var textLen = " score=".length;
+        var cookieItems = document.cookie.split(";");
+        var currentScore = cookieItems[1].substring(textLen, cookieItems[1].length);
+
+        textLen = "quiz=".length;
+        var quizNum = cookieItems[0].substring(textLen, cookieItems[0].length);
+
+        $.getJSON("quiz.json", function(data){
+          var total = data.quizzes[quizNum].questions.length;
+          console.log(total);
+          document.getElementById("score").innerHTML = currentScore + " / " + total;
+        });
+      }
+
+    </script>
+  </head>
+
+  <body>
+    <button id = "return-button" onclick = "returnToWelcome()"> Back To Quiz Select </button>
+    <h1 class = "title"> QUIZ RESULTS</h1>
+
+    <h3 class = "title"> You Scored... </h3>
+    <h3 id = "score"> <!-- Dynamically Add Score Here--> </h3>
+
+    <script>
+      displayScoreResults();
+    </script>
+
+  </body>
+</html>

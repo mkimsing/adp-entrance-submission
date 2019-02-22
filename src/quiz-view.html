@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Quiz View</title>
+
+    <script src="C:\Users\MKS\Documents\adp-entrance\jquery-3.3.1.min.js"></script>
+
+    <style>
+      #score{
+        text-align:end;
+      }
+
+      .title{
+        text-align:center;
+      }
+
+      #buttons-wrapper{
+        display:flex;
+        flex-wrap:wrap;
+      }
+
+      .button-question{
+        text-align: center;
+        flex: 1 0 21%;
+        height: 100px;
+        background-color:sandybrown;
+      }
+
+    </style>  
+
+    <script>
+      //GLOBAL VARIABLES
+      var quizNum = Number(readCookie("quiz"));
+      var questionNum = Number(readCookie("question"));
+
+      function showCorrectAnswer(itemClicked){
+        //Recolor answers to show correct, disable on click event
+        $("#buttons-wrapper").children().each(function(){
+          if(this.value == "true"){
+            this.style.backgroundColor="green";
+            this.style.color = "rgb(66, 134, 244)";
+          }
+          else{
+            this.style.backgroundColor="red";
+          }
+          this.disabled = "true";
+        });
+
+        //Update Score
+        if(itemClicked.target.value == "true"){
+          var currentScore = Number(readCookie("score"));
+          var newScore = currentScore + 1;
+          document.cookie = "score=" + newScore;
+        }
+        displayScore(readCookie(score));
+        
+        //Load new question after 2sec (2000 mili sec)
+        setTimeout(loadNewQuestion, 2000);
+      }
+
+      //Load new question by updating the cookie and refreshing page
+      function loadNewQuestion() {
+        var quizNum = readCookie("quiz");
+        $.getJSON("quiz.json", function(data){
+          if(questionNum < Number(data.quizzes[quizNum].questions.length)-1){
+            var nextQuestionNum = Number(questionNum) + 1;
+            document.cookie = "question=" + nextQuestionNum;
+            location.reload();
+          }
+          else{
+            location.href("quiz-results.html");
+          }
+        });
+      }
+
+      function makeAnswerButtons() {
+        $.getJSON("quiz.json", function(data){
+          //Make buttons
+          for(i =0; i<=data.quizzes[quizNum].questions.length; i++)
+          {
+            var btn = document.createElement("BUTTON");
+            var text = document.createTextNode(data.quizzes[quizNum].questions[questionNum].answers[i].content);
+            btn.appendChild(text);
+            btn.className = "button-question";
+            btn.type = "button";
+            btn.value = data.quizzes[quizNum].questions[questionNum].answers[i].value; //TODO change: currently exposes value in elements viewer
+            btn.onclick = showCorrectAnswer.bind(this);
+            document.getElementById("buttons-wrapper").appendChild(btn);
+          }
+        });
+      }
+
+      function displayQuestion(){
+        $.getJSON("quiz.json", function(data){
+          document.getElementById("currentQuestion").innerHTML = data.quizzes[quizNum].questions[questionNum].question;
+        });
+      }
+
+      function displayScore(){
+        var currentScore = readCookie("score");
+        $.getJSON("quiz.json", function(data){
+          total = data.quizzes[quizNum].questions.length;
+          document.getElementById("score").innerHTML = "Score: "+ currentScore + " / " + total;
+        });
+      }
+
+      function readCookie(itemToRead){
+        var textLen;
+        var itemNum;
+        switch(itemToRead){
+          case "quiz":
+            textLen = "quiz=".length;
+            itemNum = 0;
+            break;
+          case "score":
+            textLen = " score=".length;
+            itemNum = 1;
+            break;
+          case "question":
+            textLen = " question=".length;
+            itemNum = 2;
+            break;
+          default:
+            textLen = 5;
+            itemNum = 0;
+        }
+        var cookieItems = document.cookie.split(";");
+        return cookieItems[itemNum].substring(textLen, cookieItems[itemNum].length);
+      }
+
+      function returnToWelcome(){
+        location.href = "quiz-welcome.html";
+      }
+
+      function displayInstructions(){
+        $.getJSON("quiz.json", function(data){
+          var totalQuestions = Number(data.quizzes[quizNum].questions.length);
+          document.getElementById("instructions").innerHTML = "Question " + (questionNum+1) + " of " + totalQuestions + " - Click your answer below:"
+        });
+      }
+        
+
+    </script>
+  </head>
+
+  <body>
+    <button id = "return-button" onclick = "returnToWelcome()"> Back To Quiz Select </button>
+    <h2 id ="score"> <!--Score dynamically added here --> </h2>
+   
+    <h1 class = "title"> Quiz </h1>
+
+    <h3 class = "title" id = "currentQuestion"> 
+      <!--Question dynamically Added Here-->
+    </h3>
+
+    <h5 id = "instructions"> <!--Question number and instructions Added Here--> </h5>
+    
+    <div id = "buttons-wrapper">
+      <!--Answer Buttons dynamically Added Here-->
+    </div>
+
+    <script>
+      displayQuestion();
+      makeAnswerButtons();
+      displayScore();
+      displayInstructions();
+    </script>
+  </body>
+</html>
