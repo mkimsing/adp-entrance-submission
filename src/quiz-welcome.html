@@ -40,6 +40,14 @@
         document.cookie = "score=" + score;
         document.cookie = "question=" + questionNum;
       }
+
+      function loadQuiz(num)
+      {
+        clearCookie();
+        setCookie(num,0,0);
+        location.href = "quiz-view.html";
+      }
+
     </script>
   </head>
 
@@ -50,15 +58,5 @@
       <button type = "button" class = "button-abstractQuiz" onclick="loadQuiz(0)"> Start the Abstract Quiz!</button>
       <button type = "button" class = "button-devQuiz" onclick="loadQuiz(1)"> Start the Developer Quiz!</button>
     </div>
-
-    <script>
-      function loadQuiz(num)
-      {
-        clearCookie();
-        setCookie(num,0,0);
-        location.href = "quiz-view.html";
-      }
-
-    </script>
   </body>
 </html>

@@ -4,22 +4,16 @@
     <title>Quiz Results</title>
 
     <script src="C:\Users\MKS\Documents\adp-entrance\jquery-3.3.1.min.js"></script>
+    <script src = "quiz.js"></script>
 
     <style>
       .title{
         text-align:center;
       }
 
-      #score{
-        text-align:center;
-      }
-
-      #verdict{
-        text-align:center;
-      }
-
       .pass{
         color:green;
+        font-family:serif;
       }
 
       .fail{
@@ -33,48 +27,31 @@
     </style>
 
     <script>
-      function returnToWelcome(){
-        location.href = "quiz-welcome.html";
-      }
-
       function displayScoreResults(){
         var textLen = " score=".length;
         var cookieItems = document.cookie.split(";");
         var currentScore = cookieItems[1].substring(textLen, cookieItems[1].length);
 
-        textLen = "quiz=".length;
-        var quizNum = cookieItems[0].substring(textLen, cookieItems[0].length);
-
+        //Generate the text to display
         $.getJSON("quiz.json", function(data){
           var total = data.quizzes[quizNum].questions.length;
           var scoreString = currentScore + " / " + total;
           var percentage = (Number(currentScore)/Number(total)*100).toFixed(2);
           var percentageString = "This is " + percentage + "% correct";
+
           document.getElementById("score").innerHTML = scoreString + "<br>"+ percentageString;
 
-          var quizName;
-          if(Number(quizNum) === 0){
-            quizName = "Abstract Quiz";
-          }
-          else if(Number(quizNum) === 1){
-            quizName = "Developer Quiz";
-          }
-
+          // Change item class depending on pass/fail
           if(percentage > 50){
             document.getElementById("verdict").innerHTML = " Congrats! You passed the " + quizName;
-            document.getElementById("verdict").className = "pass";
+            document.getElementById("verdict").classList.add("pass");
           }
           else{
             document.getElementById("verdict").innerHTML = " Sorry, you failed the " + quizName;
-            document.getElementById("verdict").className = "fail";
+            document.getElementById("verdict").classList.add("fail");
           }
         });
       }
-
-      function clearCookie(){
-        document.cookie = 'quiz=; score=; question=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/'
-      }
-
     </script>
   </head>
 
@@ -83,12 +60,11 @@
     <h1 class = "title"> QUIZ RESULTS</h1>
 
     <h3 class = "title"> You Scored... </h3>
-    <h3 id = "score"> <!-- Dynamically Add Score Here--> </h3>
-    <h2 id = "verdict"> <!-- Dynamically Add Verdict Here--></h4>
+    <h3 class = "title" id = "score"> <!-- Dynamically Add Score Here--> </h3>
+    <h2 class = "title" id = "verdict"> <!-- Dynamically Add Verdict Here--></h2>
     <script>
       displayScoreResults();
       clearCookie();
     </script>
-
   </body>
 </html>
