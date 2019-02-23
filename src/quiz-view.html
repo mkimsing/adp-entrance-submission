@@ -24,6 +24,15 @@
         flex: 1 0 21%;
         height: 100px;
         background-color:sandybrown;
+        margin: 5px;
+        cursor: pointer;
+      }
+      .button-question:hover{
+        background-color:burlywood
+      }
+
+      body{
+        background-color: #92a8d1;
       }
 
     </style>  
@@ -34,12 +43,13 @@
       var questionNum = Number(readCookie("question"));
 
       function showCorrectAnswer(itemClicked){
-        //Recolor answers to show correct, disable on click event
+        //Recolor answers to show correct, disable onclick event
         $("#buttons-wrapper").children().each(function(){
           if(this.value == "true"){
-            this.style.backgroundColor="green";
+            this.style.backgroundColor="lightgreen";
             this.style.color = "rgb(66, 134, 244)";
-          }
+            this.style.fontSize= "16px";
+          } 
           else{
             this.style.backgroundColor="red";
           }
@@ -100,7 +110,7 @@
         var currentScore = readCookie("score");
         $.getJSON("quiz.json", function(data){
           total = data.quizzes[quizNum].questions.length;
-          document.getElementById("score").innerHTML = "Score: "+ currentScore + " / " + total;
+          document.getElementById("score").innerHTML = "Correct Answers: "+ currentScore;
         });
       }
 
@@ -139,6 +149,15 @@
         });
       }
         
+      function displayQuizName(){
+        if(Number(quizNum) === 0){
+          quizName = "Abstract Quiz";
+        }
+        else if(Number(quizNum) === 1){
+          quizName = "Developer Quiz";
+        }
+        document.getElementById("quiz-title").innerHTML = quizName;
+      }
 
     </script>
   </head>
@@ -147,7 +166,7 @@
     <button id = "return-button" onclick = "returnToWelcome()"> Back To Quiz Select </button>
     <h2 id ="score"> <!--Score dynamically added here --> </h2>
    
-    <h1 class = "title"> Quiz </h1>
+    <h1 class = "title" id= "quiz-title"> Quiz </h1>
 
     <h3 class = "title" id = "currentQuestion"> 
       <!--Question dynamically Added Here-->
@@ -160,10 +179,11 @@
     </div>
 
     <script>
+      displayQuizName();
       displayQuestion();
-      makeAnswerButtons();
       displayScore();
       displayInstructions();
+      makeAnswerButtons();
     </script>
   </body>
 </html>

@@ -13,6 +13,23 @@
       #score{
         text-align:center;
       }
+
+      #verdict{
+        text-align:center;
+      }
+
+      .pass{
+        color:green;
+      }
+
+      .fail{
+        color:darkred;
+        font-family:courier;
+      }
+
+      body{
+        background-color:bisque;
+      }
     </style>
 
     <script>
@@ -30,9 +47,32 @@
 
         $.getJSON("quiz.json", function(data){
           var total = data.quizzes[quizNum].questions.length;
-          console.log(total);
-          document.getElementById("score").innerHTML = currentScore + " / " + total;
+          var scoreString = currentScore + " / " + total;
+          var percentage = (Number(currentScore)/Number(total)*100).toFixed(2);
+          var percentageString = "This is " + percentage + "% correct";
+          document.getElementById("score").innerHTML = scoreString + "<br>"+ percentageString;
+
+          var quizName;
+          if(Number(quizNum) === 0){
+            quizName = "Abstract Quiz";
+          }
+          else if(Number(quizNum) === 1){
+            quizName = "Developer Quiz";
+          }
+
+          if(percentage > 50){
+            document.getElementById("verdict").innerHTML = " Congrats! You passed the " + quizName;
+            document.getElementById("verdict").className = "pass";
+          }
+          else{
+            document.getElementById("verdict").innerHTML = " Sorry, you failed the " + quizName;
+            document.getElementById("verdict").className = "fail";
+          }
         });
+      }
+
+      function clearCookie(){
+        document.cookie = 'quiz=; score=; question=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/'
       }
 
     </script>
@@ -44,9 +84,10 @@
 
     <h3 class = "title"> You Scored... </h3>
     <h3 id = "score"> <!-- Dynamically Add Score Here--> </h3>
-
+    <h2 id = "verdict"> <!-- Dynamically Add Verdict Here--></h4>
     <script>
       displayScoreResults();
+      clearCookie();
     </script>
 
   </body>

@@ -4,16 +4,33 @@
     <title> Quiz Welcome Page</title>
 
     <script src="C:\Users\MKS\Documents\adp-entrance\jquery-3.3.1.min.js"></script>
+    <script src = "quiz.js"></script>
 
     <style>
       .button-abstractQuiz{
         background-color:lightgreen;
         text-align: center;
+        height: 35px;
+        cursor: pointer;
       }
 
       .button-devQuiz{
-        background-color:red;
+        background-color:lightblue;
         text-align:center;
+        height: 35px;
+        cursor: pointer;
+      }
+
+      .title{
+        text-align:center;
+      }
+
+      .wrapper{
+        text-align:center;
+      }
+
+      body{
+        background-color: #92a8d1;
       }
     </style>
 
@@ -23,18 +40,16 @@
         document.cookie = "score=" + score;
         document.cookie = "question=" + questionNum;
       }
-
-      function clearCookie(){
-        document.cookie = 'quiz=; score=; question=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/'
-      }
     </script>
   </head>
 
   <body>
-    <h1> Quiz Start</h1>
-
-    <button type = "button" class = "button-abstractQuiz" onclick="loadQuiz(0)"> Start the Abstract Quiz!</button>
-    <button type = "button" class = "button-devQuiz" onclick="loadQuiz(1)"> Start the Developer Quiz!</button>
+    <h1 class = "title"> Welcome to the Quiz!</h1>
+    <h3 class = "title"> Please select a quiz from the options below: </h3>
+    <div class ="wrapper">    
+      <button type = "button" class = "button-abstractQuiz" onclick="loadQuiz(0)"> Start the Abstract Quiz!</button>
+      <button type = "button" class = "button-devQuiz" onclick="loadQuiz(1)"> Start the Developer Quiz!</button>
+    </div>
 
     <script>
       function loadQuiz(num)
@@ -46,19 +61,4 @@
 
     </script>
   </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </html>
