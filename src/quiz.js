@@ -34,10 +34,10 @@ function getQuizName(){
   var quizTitle;
   switch(quizNum){
     case 0:
-      quizTitle = "Abstract Quiz";
+      quizTitle = "Abstract";
       break;
     case 1:
-      quizTitle = "Developer Quiz";
+      quizTitle = "Developer";
       break;
     default:
       quizTitle= "";
